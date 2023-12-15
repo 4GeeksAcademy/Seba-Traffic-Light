@@ -1,24 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
 
 function App() {
+  const [encendido, setEncendido] = useState("red")
+  const [activar, setActivar] = useState(false)
+
+  const changeColor = (color) => {
+    setEncendido(color)
+  }
+
+  useEffect(() => {
+    if (activar) {
+      const interval = setInterval(() => {
+        if (encendido == "red") {
+          setEncendido("yellow")
+        } else if (encendido == "yellow") {
+          setEncendido("green")
+        } else if (encendido == "green") {
+          setEncendido("red")
+        }
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [activar, encendido])
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <div className="p-box"></div>
+      <div className="box-light">
+        <div className={`red ${encendido == "red" ? "light-on" : ""}`} onClick={() => changeColor("red")}></div>
+        <div className={`yellow ${encendido == "yellow" ? "light-on" : ""}`} onClick={() => changeColor("yellow")}></div>
+        <div className={`green ${encendido == "green" ? "light-on" : ""}`} onClick={() => changeColor("green")}></div>
+      </div>
+      <button onClick={() => setActivar(!activar)}>Activar</button>
+    </main>
+
   );
 }
 
